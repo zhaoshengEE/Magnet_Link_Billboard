@@ -14,16 +14,17 @@ contract magnet {
         address payable seedOwner;
         string seedDescription;
     }
-    struct UserInfo { // seedId -> struct
+    struct UserInfo { // * seedId -> struct
         mapping(uint256 => SeedInfo) personalSeedMap;
         SeedInfo[] personalseeds;
     }
     mapping(uint256 => SeedInfo) magnetItems;
-    //mapping(address => UserInfo) users;
+    // mapping(address => UserInfo) users;
     //mapping(string => SeedInfo) keyMap;
     //mapping(uint=>bool)
-    mapping(address=>uint[]) OwnerSeedsSummary; //record all uploaded seeds for each owner
-    mapping(uint=>address[]) SeedsOwnerSummary; //record all owners for each seeds
+    mapping(address=>uint[]) public OwnerSeedsSummary; //record all uploaded seeds for each owner
+    mapping(uint=>address[]) public SeedsOwnerSummary; //record all owners for each seeds
+
 
     address public owner;
     string public billboardName;
@@ -53,7 +54,7 @@ contract magnet {
         uint256 endorseAmount
     );
 
-    // modifier onlybuyer {
+    // modifier endorseonce {
 
     //     require();
     //     _;
@@ -76,13 +77,17 @@ contract magnet {
 
         seedAmount += 1;
         magnetItems[seedAmount] = SeedInfo(_seedName, _seedLink, _keyWords, _chargeAmount, seedAmount, 0, msg.sender, _seedDescription); //
-        users[msg.sender].personalseeds.push(magnetItems[seedAmount]);
+        
+        OwnerSeedsSummary[msg.sender].push(magnetItems[seedAmount].seedId); // * msg.sender push this seed into his seedArray
+        SeedsOwnerSummary[magnetItems[seedAmount].seedId].push(msg.sender); // * this seed add msg.sender as one of  its owner
+        
+        // users[msg.sender].personalseeds.push(magnetItems[seedAmount]);
         emit seedUploaded(seedAmount, msg.sender, _seedName, _keyWords, _seedLink, _seedDescription, _chargeAmount, magnetItems[seedAmount].endorseAmount);
 
     }
 
 
-    function download(uint256 _seedId) public payable {
+    function download(uint256 _seedId) public payable returns(string memory){
 
         SeedInfo memory _seed = magnetItems[_seedId];
         address payable _uploader = _seed.seedOwner;
@@ -93,10 +98,15 @@ contract magnet {
         if (msg.value > _seed.chargeAmount) {
 
             msg.sender.transfer(msg.value - _seed.chargeAmount);
-            users[msg.sender].personalseeds.push(_seed);
+            
+            OwnerSeedsSummary[msg.sender].push(magnetItems[_seedId].seedId);
+            SeedsOwnerSummary[magnetItems[_seedId].seedId].push(msg.sender);
+            
+            // users[msg.sender].personalseeds.push(_seed);
         }
 
         emit seedDownloaded(seedAmount, msg.sender, _seed.seedName, _seed.keyWords, _seed.seedLink, _seed.seedDescription, _seed.chargeAmount, _seed.endorseAmount);
+        return magnetItems[_seedId].seedLink;
     }
 
 
@@ -114,23 +124,42 @@ contract magnet {
     function endorse(uint256 _seedId) public {
 
         require(_seedId > 0 && _seedId <= seedAmount, 'seed does not exist');
-        bool downloaded = false; //只有下载之后才可以endorse 在自己的种子数组中遍历
-
-        for (uint256 i = 0; i <= seedAmount; i++) {
-            if (users[msg.sender].personalseeds[i].seedId == _seedId) {
-                users[msg.sender].personalseeds[i].seedOwner.transfer(users[msg.sender].personalseeds[i].chargeAmount * 9 / 10);
-                users[msg.sender].personalseeds[i].endorseAmount ++;
-                download = true;
+        bool found = false; 
+        
+        // * this for loop is to limit user only who have downloaded this seed can endorse it
+        
+        for (uint256 i = 0; i < OwnerSeedsSummary[msg.sender].length; i++) {
+             
+            if (OwnerSeedsSummary[msg.sender][i] == _seedId) {
+                require((msg.sender) != (magnetItems[_seedId].seedOwner), "you cannot endorse your own torrent file." );
+                magnetItems[_seedId].seedOwner.transfer(magnetItems[_seedId].chargeAmount * 9 / 10);
+                magnetItems[_seedId].endorseAmount ++;
+                found = true;
                 break;
             }
         }
-        require(!downloaded, "Only can endorse downloaded torrent files");
+        require(found, "Only can endorse downloaded torrent files");
     }
+
+
+
+
 
 
     function contractBalance() public view returns (uint256 contractEth){
 
         return (address(this).balance);
-
     }
+    
+    function checkSeedOwner(uint256 _seedId) public view returns (address[] memory) {
+        
+        return (SeedsOwnerSummary[_seedId]);
+    }
+    
+    function checkUserSeeds() public view returns (uint[] memory) {
+        
+        return (OwnerSeedsSummary[msg.sender]);
+    }
+    
+    
 }
