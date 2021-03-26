@@ -94,16 +94,21 @@ contract magnet {
         require(_seed.seedId > 0 && _seed.seedId <= seedAmount, 'seed does not exist');
         require(msg.value >= _seed.chargeAmount, 'insufficient ether');
         require(msg.sender != _uploader, 'you cannot download your own resources.');
-
-        if (msg.value > _seed.chargeAmount) {
-
-            msg.sender.transfer(msg.value - _seed.chargeAmount);
-            
-            OwnerSeedsSummary[msg.sender].push(magnetItems[_seedId].seedId);
-            SeedsOwnerSummary[magnetItems[_seedId].seedId].push(msg.sender);
+        bool exist = false;
+        for (uint8 i=0; i<OwnerSeedsSummary[msg.sender].length;i++){
+            if (OwnerSeedsSummary[msg.sender][i]==_seedId){
+                exist = true;
+                msg.sender.transfer(msg.value); //refund
+                break;
+            }
+        }
+        require(!exist, "you have already download");
+        _uploader.transfer(_seed.chargeAmount*9/10); //give 0.9 to downloader; 0.1 remains in contract
+        msg.sender.transfer(msg.value - _seed.chargeAmount); //return extra money
+        OwnerSeedsSummary[msg.sender].push(magnetItems[_seedId].seedId);
+        SeedsOwnerSummary[magnetItems[_seedId].seedId].push(msg.sender);
             
             // users[msg.sender].personalseeds.push(_seed);
-        }
 
         emit seedDownloaded(seedAmount, msg.sender, _seed.seedName, _seed.keyWords, _seed.seedLink, _seed.seedDescription, _seed.chargeAmount, _seed.endorseAmount);
         return magnetItems[_seedId].seedLink;
@@ -132,7 +137,7 @@ contract magnet {
              
             if (OwnerSeedsSummary[msg.sender][i] == _seedId) {
                 require((msg.sender) != (magnetItems[_seedId].seedOwner), "you cannot endorse your own torrent file." );
-                magnetItems[_seedId].seedOwner.transfer(magnetItems[_seedId].chargeAmount * 9 / 10);
+                magnetItems[_seedId].seedOwner.transfer(contractBalance()/100000000000);
                 magnetItems[_seedId].endorseAmount ++;
                 found = true;
                 break;
@@ -140,11 +145,6 @@ contract magnet {
         }
         require(found, "Only can endorse downloaded torrent files");
     }
-
-
-
-
-
 
     function contractBalance() public view returns (uint256 contractEth){
 
