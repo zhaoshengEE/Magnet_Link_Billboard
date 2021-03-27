@@ -36,11 +36,18 @@ contract("MagnetLinkBillboard",([deployer,uploader1,downloader])=>{
         let uploadReceipt=await magnetLinkBillboard.upload(seedName,seedLink,keyWords,chargeAmount,seedDescription)
 
         truffleAssert.eventEmitted(uploadReceipt,'SeedUploaded',(event)=>{
-            console.log(event)
             return chargeAmount.toString()==event.chargeAmount.toString()
         })
         })
 
 
+     it("test get one magnetItem",async ()=>{
+         let res= await magnetLinkBillboard.magnetItems(1)
+         console.log("---------test get magnetItem-----------------------")
+         console.log(res)
+     })
 
 });
+
+
+

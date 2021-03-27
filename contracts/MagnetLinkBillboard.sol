@@ -18,7 +18,7 @@ contract MagnetLinkBillboard {
         mapping(uint256 => SeedInfo) personalSeedMap;
         SeedInfo[] personalseeds;
     }
-    mapping(uint256 => SeedInfo) magnetItems;
+    mapping(uint256 => SeedInfo) public magnetItems ;
     // mapping(address => UserInfo) users;
     //mapping(string => SeedInfo) keyMap;
     //mapping(uint=>bool)
@@ -76,13 +76,14 @@ contract MagnetLinkBillboard {
         require(_chargeAmount >= 0);
 
         seedAmount += 1;
-        magnetItems[seedAmount] = SeedInfo(_seedName, _seedLink, _keyWords, _chargeAmount, seedAmount, 0, msg.sender, _seedDescription); //
+       uint256 seedId= seedAmount;
+        magnetItems[seedId] = SeedInfo(_seedName, _seedLink, _keyWords, _chargeAmount, seedId, 0, msg.sender, _seedDescription); //
         
-        OwnerSeedsSummary[msg.sender].push(magnetItems[seedAmount].seedId); // * msg.sender push this seed into his seedArray
-        SeedsOwnerSummary[magnetItems[seedAmount].seedId].push(msg.sender); // * this seed add msg.sender as one of  its owner
+        OwnerSeedsSummary[msg.sender].push(magnetItems[seedId].seedId); // * msg.sender push this seed into his seedArray
+        SeedsOwnerSummary[magnetItems[seedId].seedId].push(msg.sender); // * this seed add msg.sender as one of  its owner
         
         // users[msg.sender].personalseeds.push(magnetItems[seedAmount]);
-        emit SeedUploaded(seedAmount, msg.sender, _seedName, _keyWords, _seedLink, _seedDescription, _chargeAmount, magnetItems[seedAmount].endorseAmount);
+        emit SeedUploaded(seedId, msg.sender, _seedName, _keyWords, _seedLink, _seedDescription, _chargeAmount, magnetItems[seedId].endorseAmount);
 
     }
 
