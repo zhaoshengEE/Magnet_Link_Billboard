@@ -1,1 +1,4 @@
 # Magnet_Link_Billboard
+
+前端界面只显示magnetItemsPublicInfo，
+想获取链接要请求download(),对于免费资源直接返回链接，对于付费的资源请求的时候要带足够的钱才能返回链接

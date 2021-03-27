@@ -8,6 +8,12 @@ const truffleAssert = require('truffle-assertions');
 contract("MagnetLinkBillboard",([deployer,uploader1,downloader])=>{
     let magnetLinkBillboard;
 
+    let seedName='seedName9999'
+    let seedLink='seedLink_45tt534345ggr5'
+    let keyWords='keyWords_g4545g45g45g'
+    let chargeAmount=web3.utils.toWei("0.1",'ether') //wei
+    let  seedDescription="dfgfsgsdfgdfgdfg"
+
 
 
     before(async () =>{
@@ -16,22 +22,13 @@ contract("MagnetLinkBillboard",([deployer,uploader1,downloader])=>{
 
     it('test contract deployment', async()=>{
         assert.isNotNull(magnetLinkBillboard)
-        console.log(magnetLinkBillboard)
 
         assert.equal(await magnetLinkBillboard.billboardName(),"Magnet Link Billboard")
     });
 
-    //        function upload(string memory _seedName,
-    //        string memory _seedLink,
-    //        string memory _keyWords,
-    //        uint256 _chargeAmount,
-    //        string memory _seedDescription) public {
+
     it("test upload",async ()=>{
-        let seedName='seedName9999'
-        let seedLink='seedLink_45tt534345ggr5'
-        let keyWords='keyWords_g4545g45g45g'
-        let chargeAmount=web3.utils.toWei("0.1",'ether') //wei
-        let  seedDescription="dfgfsgsdfgdfgdfg"
+
 
         let uploadReceipt=await magnetLinkBillboard.upload(seedName,seedLink,keyWords,chargeAmount,seedDescription)
 
@@ -41,11 +38,18 @@ contract("MagnetLinkBillboard",([deployer,uploader1,downloader])=>{
         })
 
 
-     it("test get one magnetItem",async ()=>{
-         let res= await magnetLinkBillboard.magnetItems(1)
-         console.log("---------test get magnetItem-----------------------")
-         console.log(res)
+     it("test get one magnetItemsPublicInfo",async ()=>{
+         let magnetItemsPublicInfo= await magnetLinkBillboard.magnetItemsPublicInfo(1)
+         assert.equal(magnetItemsPublicInfo.seedName,seedName)
+         assert.equal(magnetItemsPublicInfo.seedDescription,seedDescription)
+         assert.equal(magnetItemsPublicInfo.keyWords,keyWords)
+
+
+
+
      })
+
+
 
 });
 
