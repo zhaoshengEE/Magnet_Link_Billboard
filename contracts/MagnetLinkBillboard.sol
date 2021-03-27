@@ -3,10 +3,9 @@ pragma solidity ^0.7.6;
 //todo: search function, update download and upload function
 //optional: tag viewing, modifier,
 contract MagnetLinkBillboard {
-
     struct SeedInfo {
         string seedName;
-        string seedLink;
+        //string seedLink;
         string keyWords;
         uint256 chargeAmount;
         uint256 seedId; //primary key
@@ -14,19 +13,10 @@ contract MagnetLinkBillboard {
         address payable seedOwner;
         string seedDescription;
     }
-    struct UserInfo { // * seedId -> struct
-        mapping(uint256 => SeedInfo) personalSeedMap;
-        SeedInfo[] personalseeds;
-    }
-    mapping(uint256 => SeedInfo) public magnetItems ;
-    // mapping(address => UserInfo) users;
-    //mapping(string => SeedInfo) keyMap;
-    //mapping(uint=>bool)
+    mapping(uint256 => SeedInfo) public magnetItemsPublicInfo;
+    mapping(uint256 => string) magnetItemsSeedLinks;
     mapping(address=>uint[]) public OwnerSeedsSummary; //record all uploaded seeds for each owner
     mapping(uint=>address[]) public SeedsOwnerSummary; //record all owners for each seeds
-
-
-
     string public billboardName;
     string empty = '';
     uint256 seedAmount = 0;
@@ -36,7 +26,6 @@ contract MagnetLinkBillboard {
         address payable indexed seedOwner,
         string seedName,
         string indexed keyWords,
-        string seedLink,
         string seedDescription,
         uint256 chargeAmount,
         uint256 endorseAmount
@@ -48,22 +37,13 @@ contract MagnetLinkBillboard {
         address payable indexed seedOwner,
         string seedName,
         string indexed keyWords,
-        string seedLink,
         string seedDescription,
         uint256 chargeAmount,
         uint256 endorseAmount
     );
 
-    // modifier endorseonce {
-
-    //     require();
-    //     _;
-
-    // }
-
     constructor() public {
         billboardName = "Magnet Link Billboard";
-
     }
 
 
@@ -77,20 +57,20 @@ contract MagnetLinkBillboard {
 
         seedAmount += 1;
        uint256 seedId= seedAmount;
-        magnetItems[seedId] = SeedInfo(_seedName, _seedLink, _keyWords, _chargeAmount, seedId, 0, msg.sender, _seedDescription); //
-        
-        OwnerSeedsSummary[msg.sender].push(magnetItems[seedId].seedId); // * msg.sender push this seed into his seedArray
-        SeedsOwnerSummary[magnetItems[seedId].seedId].push(msg.sender); // * this seed add msg.sender as one of  its owner
+        magnetItemsPublicInfo[seedId] = SeedInfo(_seedName, _keyWords, _chargeAmount, seedId, 0, msg.sender, _seedDescription); //
+        magnetItemsSeedLinks[seedId] = _seedLink;
+        OwnerSeedsSummary[msg.sender].push(magnetItemsPublicInfo[seedId].seedId); // * msg.sender push this seed into his seedArray
+        SeedsOwnerSummary[magnetItemsPublicInfo[seedId].seedId].push(msg.sender); // * this seed add msg.sender as one of  its owner
         
         // users[msg.sender].personalseeds.push(magnetItems[seedAmount]);
-        emit SeedUploaded(seedId, msg.sender, _seedName, _keyWords, _seedLink, _seedDescription, _chargeAmount, magnetItems[seedId].endorseAmount);
+        emit SeedUploaded(seedId, msg.sender, _seedName, _keyWords, _seedDescription, _chargeAmount, magnetItemsPublicInfo[seedId].endorseAmount);
 
     }
 
 
     function download(uint256 _seedId) public payable returns(string memory){
 
-        SeedInfo memory _seed = magnetItems[_seedId];
+        SeedInfo memory _seed = magnetItemsPublicInfo[_seedId];
         address payable _uploader = _seed.seedOwner;
         require(_seed.seedId > 0 && _seed.seedId <= seedAmount, 'seed does not exist');
         require(msg.value >= _seed.chargeAmount, 'insufficient ether');
@@ -106,13 +86,13 @@ contract MagnetLinkBillboard {
         require(!exist, "you have already download");
         _uploader.transfer(_seed.chargeAmount*9/10); //give 0.9 to downloader; 0.1 remains in contract
         msg.sender.transfer(msg.value - _seed.chargeAmount); //return extra money
-        OwnerSeedsSummary[msg.sender].push(magnetItems[_seedId].seedId);
-        SeedsOwnerSummary[magnetItems[_seedId].seedId].push(msg.sender);
+        OwnerSeedsSummary[msg.sender].push(magnetItemsPublicInfo[_seedId].seedId);
+        SeedsOwnerSummary[magnetItemsPublicInfo[_seedId].seedId].push(msg.sender);
             
             // users[msg.sender].personalseeds.push(_seed);
 
-        emit SeedDownloaded(seedAmount, msg.sender, _seed.seedName, _seed.keyWords, _seed.seedLink, _seed.seedDescription, _seed.chargeAmount, _seed.endorseAmount);
-        return magnetItems[_seedId].seedLink;
+        emit SeedDownloaded(seedAmount, msg.sender, _seed.seedName, _seed.keyWords, _seed.seedDescription, _seed.chargeAmount, _seed.endorseAmount);
+        return magnetItemsSeedLinks[_seedId];
     }
 
 
@@ -137,9 +117,9 @@ contract MagnetLinkBillboard {
         for (uint256 i = 0; i < OwnerSeedsSummary[msg.sender].length; i++) {
              
             if (OwnerSeedsSummary[msg.sender][i] == _seedId) {
-                require((msg.sender) != (magnetItems[_seedId].seedOwner), "you cannot endorse your own torrent file." );
-                magnetItems[_seedId].seedOwner.transfer(contractBalance()/100000000000);
-                magnetItems[_seedId].endorseAmount ++;
+                require((msg.sender) != (magnetItemsPublicInfo[_seedId].seedOwner), "you cannot endorse your own torrent file." );
+                magnetItemsPublicInfo[_seedId].seedOwner.transfer(contractBalance()/100000000000);
+                magnetItemsPublicInfo[_seedId].endorseAmount ++;
                 found = true;
                 break;
             }
