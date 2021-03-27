@@ -2,7 +2,7 @@
 pragma solidity ^0.7.6;
 //todo: search function, update download and upload function
 //optional: tag viewing, modifier,
-contract magnet {
+contract MagnetLinkBillboard {
 
     struct SeedInfo {
         string seedName;
@@ -26,12 +26,12 @@ contract magnet {
     mapping(uint=>address[]) public SeedsOwnerSummary; //record all owners for each seeds
 
 
-    address public owner;
+
     string public billboardName;
     string empty = '';
     uint256 seedAmount = 0;
 
-    event seedUploaded (
+    event SeedUploaded (
         uint256 indexed seedId,
         address payable indexed seedOwner,
         string seedName,
@@ -42,7 +42,7 @@ contract magnet {
         uint256 endorseAmount
     );
 
-    event seedDownloaded (
+    event SeedDownloaded (
 
         uint256 indexed seedId,
         address payable indexed seedOwner,
@@ -63,7 +63,7 @@ contract magnet {
 
     constructor() public {
         billboardName = "Magnet Link Billboard";
-        owner = msg.sender;
+
     }
 
 
@@ -82,7 +82,7 @@ contract magnet {
         SeedsOwnerSummary[magnetItems[seedAmount].seedId].push(msg.sender); // * this seed add msg.sender as one of  its owner
         
         // users[msg.sender].personalseeds.push(magnetItems[seedAmount]);
-        emit seedUploaded(seedAmount, msg.sender, _seedName, _keyWords, _seedLink, _seedDescription, _chargeAmount, magnetItems[seedAmount].endorseAmount);
+        emit SeedUploaded(seedAmount, msg.sender, _seedName, _keyWords, _seedLink, _seedDescription, _chargeAmount, magnetItems[seedAmount].endorseAmount);
 
     }
 
@@ -110,7 +110,7 @@ contract magnet {
             
             // users[msg.sender].personalseeds.push(_seed);
 
-        emit seedDownloaded(seedAmount, msg.sender, _seed.seedName, _seed.keyWords, _seed.seedLink, _seed.seedDescription, _seed.chargeAmount, _seed.endorseAmount);
+        emit SeedDownloaded(seedAmount, msg.sender, _seed.seedName, _seed.keyWords, _seed.seedLink, _seed.seedDescription, _seed.chargeAmount, _seed.endorseAmount);
         return magnetItems[_seedId].seedLink;
     }
 
