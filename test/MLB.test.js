@@ -12,10 +12,16 @@ contract("MagnetLinkBillboard",(accounts)=>{
     const invalidEther = '-1';
 
     const seedName = 'seedName9999';
-    const seedLink = 'seedLink_45tt534345ggr5';
+    const seedLink = 'edLink_45tt534345ggr5';
     const keyWords = 'keyWords_g4545g45g45g';
     const chargeAmount = web3.utils.toWei('1', 'ether');
-    const seedDescription = "This_is_seed description";
+    const seedDescription = "This_is_seed description 1";
+
+    const seedName2 = 'seedName8888';
+    const seedLink2 = 'seedLink_45tt534345ggr3';
+    const keyWords2 = 'keyWords_g3535g35g35g';
+    const chargeAmount2 = web3.utils.toWei('1', 'ether');
+    const seedDescription2 = "This_is_seed description 2";
     
     const deployer = accounts[0];   // The owner of the contract
     const writer = accounts[1];     // The person who uploads contents to the billboard
@@ -159,7 +165,7 @@ contract("MagnetLinkBillboard",(accounts)=>{
     });
 
     describe('Test the valid cases in download function', async()=>{
-        it("A SeedUploaded should be emitted", async() => {
+        it("A SeedDownloaded should be emitted", async() => {
             let downloadReceipt = await magnetLinkBillboard.download(1, {from: visitor, value: chargeAmount});
             truffleAssert.eventEmitted(downloadReceipt, 'SeedDownloaded', (ev)=>{
                 return ev.seedId == 1
@@ -172,20 +178,23 @@ contract("MagnetLinkBillboard",(accounts)=>{
             });
         });
 
-        it("The same visitor seed should not download the seed again", async() => {
+        it('The same visitor seed should not download the seed again', async() => {
             await truffleAssert.fails(
                 magnetLinkBillboard.download(1, {from: visitor, value: chargeAmount}),
                 truffleAssert.ErrorType.REVERT
             );
         });
 
+        it("The seed link should be returned", async() => {
+                let uploadReceipt = await magnetLinkBillboard.upload(seedName2, seedLink2, keyWords2, chargeAmount, seedDescription2, {from: writer})
+                let downloadResult = await magnetLinkBillboard.download.call(2, {from: visitor2, value: chargeAmount});
+                assert.equal(downloadResult, seedLink2);
+            });
+
         // NOT SURE HOW TO TEST THE OUTPUT OF THE FUNCTION. 
         // SINCE THE FUNCTION EMITS A EVENT AND RETURNS AN OUTPUT SIMULTANEOUSLY.
         // LET'S DISCUSS IT LATER 
-        // it("The seed link should be returned", async() => {
-        //     let downloadResult = await magnetLinkBillboard.download(1, {from: visitor2, value: chargeAmount});
-        //     assert.equal(downloadResult, seedLink);
-        // });
+
     });
 
 
@@ -199,7 +208,7 @@ contract("MagnetLinkBillboard",(accounts)=>{
 
         it('If the seedID exceeds the number of seeds on the billboard, the endorse function should not be accomplished', async() => {
             await truffleAssert.fails(
-                magnetLinkBillboard.endorse(2, {from: visitor}),
+                magnetLinkBillboard.endorse(10, {from: visitor}),
                 truffleAssert.ErrorType.REVERT
             );
         });
