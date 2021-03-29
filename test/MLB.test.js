@@ -22,11 +22,18 @@ contract("MagnetLinkBillboard",(accounts)=>{
     const keyWords2 = 'keyWords_g3535g35g35g';
     const chargeAmount2 = web3.utils.toWei('1', 'ether');
     const seedDescription2 = "This_is_seed description 2";
-    
+
+    const seedName3 = 'seedName7777';
+    const seedLink3 = 'seedLink_45tt534345ggr0';
+    const keyWords3 = 'keyWords_g1515g15g15g';
+    const chargeAmount3 = web3.utils.toWei('1', 'ether');
+    const seedDescription3 = "This_is_seed description 3";
+
     const deployer = accounts[0];   // The owner of the contract
     const writer = accounts[1];     // The person who uploads contents to the billboard
     const visitor = accounts[2];    // The person who downloads or endorses the contents on billboard
     const visitor2 = accounts[3];
+    const writer2 = accounts[4];
 
     // Used for testing the upload function when there exists empty input
     const invalidSeedName = '';
@@ -186,10 +193,18 @@ contract("MagnetLinkBillboard",(accounts)=>{
         });
 
         it("The seed link should be returned", async() => {
-                let uploadReceipt = await magnetLinkBillboard.upload(seedName2, seedLink2, keyWords2, chargeAmount, seedDescription2, {from: writer})
-                let downloadResult = await magnetLinkBillboard.download.call(2, {from: visitor2, value: chargeAmount});
-                assert.equal(downloadResult, seedLink2);
-            });
+            let uploadReceipt = await magnetLinkBillboard.upload(seedName2, seedLink2, keyWords2, chargeAmount2, seedDescription2, {from: writer});
+            let downloadResult = await magnetLinkBillboard.download.call(2, {from: visitor2, value: chargeAmount2});
+            assert.equal(downloadResult, seedLink2);
+        });
+
+        it("the seed owner should receive the chargeAmount", async() => {
+            let contractBalanceBefore = await web3.eth.getBalance(magnetLinkBillboard.address);
+            let uploadReceipt = await magnetLinkBillboard.upload(seedName3, seedLink3, keyWords3, chargeAmount3, seedDescription3, {from: writer2});
+            let downloadResult = await magnetLinkBillboard.download(3, {from: visitor2, value: chargeAmount3});
+            let contractBalanceAfter = await web3.eth.getBalance(magnetLinkBillboard.address);
+            assert.equal(contractBalanceBefore*1 + chargeAmount2* 1/10, contractBalanceAfter*1);
+        });
 
         // NOT SURE HOW TO TEST THE OUTPUT OF THE FUNCTION. 
         // SINCE THE FUNCTION EMITS A EVENT AND RETURNS AN OUTPUT SIMULTANEOUSLY.
@@ -231,6 +246,14 @@ contract("MagnetLinkBillboard",(accounts)=>{
         it("The endorseAmount should be updated", async() => {
             let magnetItemsPublicInfo = await magnetLinkBillboard.magnetItemsPublicInfo(1);
             assert.equal(magnetItemsPublicInfo.endorseAmount, 1);
+        });
+
+        it("seed owner should receive the ether after seed being downloaded", async() => {
+            let seedOwnerBalanceBefore = await magnetLinkBillboard.checkSeedOwnerBalance({from: writer2});
+            let endorseReceipt = await magnetLinkBillboard.endorse(3, {from: visitor2});
+            let seedOwnerBalanceAfter = await magnetLinkBillboard.checkSeedOwnerBalance({from: writer2});
+            let contractBalance = await web3.eth.getBalance(magnetLinkBillboard.address);
+            assert.equal(seedOwnerBalanceAfter*1, seedOwnerBalanceBefore*1 + contractBalance/100000000000);
         });
     });
 });
