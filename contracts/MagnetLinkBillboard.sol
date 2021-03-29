@@ -26,7 +26,7 @@ contract MagnetLinkBillboard {
         uint256 indexed seedId,
         address payable indexed seedOwner,
         string seedName,
-        string indexed keyWords,
+        string keyWords,
         string seedDescription,
         uint256 chargeAmount,
         uint256 endorseAmount
@@ -37,7 +37,7 @@ contract MagnetLinkBillboard {
         uint256 indexed seedId,
         address payable indexed seedOwner,
         string seedName,
-        string indexed keyWords,
+        string keyWords,
         string seedDescription,
         uint256 chargeAmount,
         uint256 endorseAmount
@@ -63,7 +63,7 @@ contract MagnetLinkBillboard {
         OwnerSeedsSummary[msg.sender].push(magnetItemsPublicInfo[seedId].seedId); // * msg.sender push this seed into his seedArray
         SeedsOwnerSummary[magnetItemsPublicInfo[seedId].seedId].push(msg.sender); // * this seed add msg.sender as one of  its owner
         endorseableSeedsSummary[msg.sender].push(magnetItemsPublicInfo[seedId].seedId);
-        
+
         emit SeedUploaded(seedId, msg.sender, _seedName, _keyWords, _seedDescription, _chargeAmount, magnetItemsPublicInfo[seedId].endorseAmount);
 
     }
@@ -90,7 +90,7 @@ contract MagnetLinkBillboard {
         OwnerSeedsSummary[msg.sender].push(magnetItemsPublicInfo[_seedId].seedId);
         SeedsOwnerSummary[magnetItemsPublicInfo[_seedId].seedId].push(msg.sender);
         endorseableSeedsSummary[msg.sender].push(magnetItemsPublicInfo[_seedId].seedId);
-        
+
         emit SeedDownloaded(seedAmount, msg.sender, _seed.seedName, _seed.keyWords, _seed.seedDescription, _seed.chargeAmount, _seed.endorseAmount);
         return magnetItemsSeedLinks[_seedId];
     }
@@ -99,13 +99,13 @@ contract MagnetLinkBillboard {
     // function search(string memory _keyWords) public returns (uint[] memory) {
 
     //     // require(keyMap[_keyWords].seedId > 0 && keyMap[_keyWords].seedId <= seedAmount, 'seed should be uploaded');
-        
+
     //     for (uint256 i=0; i < seedAmount; i++ ) {
-            
+
     //         SeedInfo memory _seed = magnetItems[i];
-            
+
     //         if (keccak256(abi.encodePacked(_seed.keyWords)) == keccak256(abi.encodePacked(_keyWords))) {
-                
+
     //             SearchResult[keyMap[_keyWords].keyWords].push(keyMap[_keyWords].seedId);
     //             break;
     //         }
@@ -117,10 +117,10 @@ contract MagnetLinkBillboard {
     function endorse(uint256 _seedId) public {
 
         require(_seedId > 0 && _seedId <= seedAmount, 'seed does not exist');
-        bool found = false; 
+        bool found = false;
 
         // * this for loop is to limit user only who have downloaded this seed can endorse it
-        
+
         for (uint256 i = 0; i < endorseableSeedsSummary[msg.sender].length; i++) {
 
             if (endorseableSeedsSummary[msg.sender][i] == _seedId) {
@@ -129,14 +129,14 @@ contract MagnetLinkBillboard {
                 magnetItemsPublicInfo[_seedId].seedOwner.transfer(contractBalance()/100000000000);
                 magnetItemsPublicInfo[_seedId].endorseAmount ++;
                 found = true;
-                
+
                 break;
             }
         }
         require(found, "Only can endorse downloaded torrent files; or you have already endorsed");
     }
-    
-    
+
+
     function removeEndorsedSeeds(uint256 index) internal {
         uint lastIndex = endorseableSeedsSummary[msg.sender].length-1;
         require (index <= lastIndex, "target index does not exist");
@@ -153,16 +153,21 @@ contract MagnetLinkBillboard {
 
         return (address(this).balance);
     }
-    
+
     function checkSeedOwner(uint256 _seedId) public view returns (address[] memory) {
-        
+
         return (SeedsOwnerSummary[_seedId]);
     }
-    
+
     function checkUserSeeds() public view returns (uint[] memory) {
-        
+
         return (OwnerSeedsSummary[msg.sender]);
     }
-    
-    
+
+    function checkSeedOwnerBalance() public view returns(uint256 SeedOwnerBalance) {
+
+        return (msg.sender.balance);
+    }
+
+
 }
