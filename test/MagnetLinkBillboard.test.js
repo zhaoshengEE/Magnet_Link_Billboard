@@ -38,9 +38,6 @@ contract("MagnetLinkBillboard",(accounts)=>{
     const invalidSeedLink = '';
     const invalidKeyWords = '';
     const invalidSeedDescription = ''
-    // const invalidChargeAmount = web3.utils.toWei(new web3.utils.BN(invalidEther));
-    const invalidChargeAmount = web3.utils.toWei('-1', 'ether');
-    // const invalidChargeAmount = -1;
     
     // Used for testing the case when the visitor has insufficient ether
     const insufficientChargeAmount = web3.utils.toWei('0.5', 'ether');
