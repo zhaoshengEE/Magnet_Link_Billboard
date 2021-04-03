@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 
-class Addressbar extends Component {
+
+const style={
+    background: "#61dafb"
+}
+
+class AddressBar extends Component {
   render() {
     return (
-    <nav>
+    <nav style={style}>
         <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
             <small className="text-black"><span id="account">{"Your Address: " + this.props.account}</span></small>
@@ -14,4 +19,4 @@ class Addressbar extends Component {
   }
 }
 
-export default Addressbar;
+export default AddressBar;

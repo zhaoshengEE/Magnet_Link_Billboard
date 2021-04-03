@@ -22,7 +22,7 @@ contract MagnetLinkBillboard {
     
     string public billboardName;
     string empty = '';
-    uint256 seedAmount = 0; // The number of seeds/files on the magnet link billboard
+    uint256 public seedAmount = 0; // The number of seeds/files on the magnet link billboard
 
     // A SeedUploaded event is emitted after uploading a seed to the billboard
     event SeedUploaded (
@@ -61,7 +61,12 @@ contract MagnetLinkBillboard {
     /**                   should not be empty                                   **/
     /** Output:                                                                 **/
     /** A SeedUploaded event                                                    **/
-    function upload(string memory _seedName, string memory _seedLink, string memory _keyWords, uint256 _chargeAmount, string memory _seedDescription) public {
+    function upload(
+        string memory _seedName,
+     string memory _seedLink, 
+     string memory _keyWords,
+      uint256 _chargeAmount, 
+      string memory _seedDescription) public {
 
         require(keccak256(bytes(_seedName)) != keccak256(bytes(empty)), 'invalid seedName');
         require(keccak256(bytes(_seedLink)) != keccak256(bytes(empty)), 'invalid seedLink');
