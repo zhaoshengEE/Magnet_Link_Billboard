@@ -1,20 +1,18 @@
-import React, {useEffect,useState,useCallback} from 'react';
+import React, {useEffect,useState,useCallback,useRef} from 'react';
 import MagnetLinkBillboard from '../abis/MagnetLinkBillboard'
 import Web3 from "web3";
 import AddressBar from "./AddressBar";
 import MagnetLinkList from "./MagnetLinkList";
 
+
 function App() {
    const [currentAccount,setCurrentAccount]=useState(null)
   const [deployedContract,setDeployedContract]=useState(null)
-  const [inputSeedInfo,setInputSeedInfo]=useState({
-    seedName: "",
-    seedLink:"",
-    keyWords:"",
-    chargeAmount:0,
-    seedDescription:""
-
-  })
+  const inputSeedName = useRef(null);
+  const inputSeedLink = useRef(null);
+  const inputKeyWords = useRef(null);
+  const inputChargeAmount = useRef(null);
+  const inputSeedDescription = useRef(null);
 
 
   useEffect( ()=>{
@@ -62,7 +60,14 @@ function App() {
   const uploadSeedToContract= useCallback(async ()=>{
 
       const web3 = window.web3;
-    let  {seedName, seedLink, keyWords, chargeAmount, seedDescription}=inputSeedInfo
+
+    let seedName=inputSeedName.current.value
+    let seedLink=inputSeedLink.current.value
+
+    let keyWords=inputKeyWords.current.value
+    let chargeAmount=inputChargeAmount.current.value
+    let seedDescription=inputSeedDescription.current.value
+
 
     let uploadHandler=await deployedContract.methods.upload(seedName, seedLink, keyWords, chargeAmount, seedDescription)
 
@@ -76,7 +81,7 @@ function App() {
         })
 
 
-  },[currentAccount,deployedContract,inputSeedInfo])
+  },[currentAccount,deployedContract])
 
 
 
@@ -86,17 +91,12 @@ function App() {
         <div>
           <AddressBar account={currentAccount}></AddressBar>
           <MagnetLinkList deployedContract={deployedContract} account={currentAccount}></MagnetLinkList>
-          seedName: <input value={inputSeedInfo.seedName} onChange={
-            (e)=>{
-              setInputSeedInfo({...inputSeedInfo,seedName:e.target.value})
+          seedName: <input  ref={inputSeedName}/><br/>
+          seedLink: <input ref={inputSeedLink}/><br/>
+          KeyWords: <input ref={inputKeyWords}/><br/>
+          ChargeAmount: <input value="0" ref={inputChargeAmount}/><br/>
+          SeedDescription: <input ref={inputSeedDescription}/><br/>
 
-            }
-
-          }></input><br/>
-          seedLink: <input value={inputSeedInfo.seedLink} onChange={(e)=>setInputSeedInfo({...inputSeedInfo,seedLink:e.target.value})}></input><br/>
-          KeyWords: <input value={inputSeedInfo.keyWords} onChange={(e)=>setInputSeedInfo({...inputSeedInfo,keyWords:e.target.value})}></input><br/>
-          ChargeAmount: <input value={inputSeedInfo.chargeAmount} onChange={(e)=>setInputSeedInfo({...inputSeedInfo,chargeAmount:e.target.value})}></input><br/>
-          SeedDescription: <input value={inputSeedInfo.seedDescription} onChange={(e)=>setInputSeedInfo({...inputSeedInfo,seedDescription:e.target.value})}></input><br/>
 
           <button onClick={uploadSeedToContract}>upload</button>
 
