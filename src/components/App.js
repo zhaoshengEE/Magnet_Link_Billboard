@@ -4,10 +4,11 @@ import Web3 from "web3";
 import AddressBar from "./AddressBar";
 import MagnetLinkList from "./MagnetLinkList";
 import Download from './Download';
+import Style from "./main.css"
 
 
 function App() {
-   const [currentAccount,setCurrentAccount]=useState(null)
+  const [currentAccount,setCurrentAccount]=useState(null)
   const [deployedContract,setDeployedContract]=useState(null)
   const inputSeedName = useRef(null);
   const inputSeedLink = useRef(null);
