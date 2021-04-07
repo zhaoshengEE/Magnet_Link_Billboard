@@ -69,10 +69,12 @@ contract MagnetLinkBillboard {
         emit SeedUploaded(seedId, msg.sender, _seedName, _keyWords, _seedDescription, _chargeAmount, magnetItemsPublicInfo[seedId].endorseAmount);
 
     }
+    function getLink(uint256 _seedId) public view returns(string memory){
+        return magnetItemsSeedLinks[_seedId];
+    }
 
-
-    function download(uint256 _seedId) public payable returns(string memory){
-
+    function download(uint256 _seedId) public payable returns(bool){
+        bool transcationSucceed = false;
         SeedInfo memory _seed = magnetItemsPublicInfo[_seedId];
         address payable _uploader = _seed.seedOwner;
         require(_seed.seedId > 0 && _seed.seedId <= seedAmount, 'seed does not exist');
@@ -95,7 +97,9 @@ contract MagnetLinkBillboard {
         uploadAndDownloadCounter[msg.sender] += 1;
         
         emit SeedDownloaded(seedAmount, msg.sender, _seed.seedName, _seed.keyWords, _seed.seedDescription, _seed.chargeAmount, _seed.endorseAmount);
-        return magnetItemsSeedLinks[_seedId];
+        transcationSucceed = true;
+        return transcationSucceed;
+        // return magnetItemsSeedLinks[_seedId];
     }
 
 

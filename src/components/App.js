@@ -3,6 +3,7 @@ import MagnetLinkBillboard from '../abis/MagnetLinkBillboard'
 import Web3 from "web3";
 import AddressBar from "./AddressBar";
 import MagnetLinkList from "./MagnetLinkList";
+import Download from './Download';
 
 
 function App() {
@@ -89,6 +90,7 @@ function App() {
 
     return (
         <div>
+          
           <AddressBar deployedContract={deployedContract} account={currentAccount}></AddressBar>
           <MagnetLinkList deployedContract={deployedContract} account={currentAccount}></MagnetLinkList>
           seedName: <input  ref={inputSeedName}/><br/>
@@ -96,10 +98,8 @@ function App() {
           KeyWords: <input ref={inputKeyWords}/><br/>
           ChargeAmount: <input value="0" ref={inputChargeAmount}/><br/>
           SeedDescription: <input ref={inputSeedDescription}/><br/>
-
-
-          <button onClick={uploadSeedToContract}>upload</button>
-
+          <button onClick={uploadSeedToContract}>upload</button><br/>
+          <Download deployedContract={deployedContract} account={currentAccount}> </Download>
 
 
 

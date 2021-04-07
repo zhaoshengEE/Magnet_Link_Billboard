@@ -56,9 +56,9 @@ function MagnetLinkList(props) {
     let getSeedInfosFromContract= async ()=>{
         console.log("--------in getSeedInfosFromContract")
         const deployedContract=props.deployedContract
-        let seedAmount=await deployedContract.methods.seedAmount().call()
-        console.log("seedAmount")
-        console.log(seedAmount.toString())
+        const seedAmount=await deployedContract.methods.seedAmount().call()
+        // console.log("seedAmount")
+        // console.log(seedAmount.toString())
 
         if (seedInfos==null||seedAmount>seedInfos.length){
             let seeds=[]
