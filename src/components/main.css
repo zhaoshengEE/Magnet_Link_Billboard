@@ -1,0 +1,34 @@
+table
+{
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: center;
+}
+table td, table th
+{
+    border: 1px solid #cad9ea;
+    color: #666;
+    height: 20px;
+    width: 1000px;
+}
+table thead th
+{
+    background-color: #CCE8EB;
+}
+
+button {  
+    width: 150px;  
+    padding:2.5px;  
+    background-color: #428bca;  
+    border-color: #357ebd;  
+    color: #fff;  
+    -moz-border-radius: 10px;  
+    -webkit-border-radius: 10px;  
+    border-radius: 10px; /* future proofing */  
+    -khtml-border-radius: 10px; /* for old Konqueror browsers */  
+    text-align: center;  
+    vertical-align: middle;  
+    border: 1px solid transparent;  
+    font-weight: 900;  
+    font-size:100%  
+  }
