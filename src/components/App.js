@@ -91,7 +91,7 @@ function App() {
     return (
         <div>
           
-          <AddressBar deployedContract={deployedContract} account={currentAccount}></AddressBar>
+          <AddressBar deployedContract={deployedContract}></AddressBar>
           <MagnetLinkList deployedContract={deployedContract} account={currentAccount}></MagnetLinkList>
           seedName: <input  ref={inputSeedName}/><br/>
           seedLink: <input ref={inputSeedLink}/><br/>
