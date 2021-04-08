@@ -6,26 +6,25 @@ const style={
     background: "#ff7744"
 }
 
-const buttonStyle={
-    background: "428bca",
-}
-
 function AddressBar (props) {
 
   const [currentAccount,setCurrentAccount]=useState(null)
   const deployedContract = props.deployedContract
   
+  
 
   useEffect( ()=>{
-    let timer
+    
     (async ()=>{
+      
       await getWeb3ProviderAndWebSocket()
       await connectToContract()
+      // await window.location.reload()
 
-      timer= setInterval(connectToContract,1000)
+      setInterval(connectToContract,1000)
       
     })()
-  },[])
+  },[props.deployedContract])
 
   async function getWeb3ProviderAndWebSocket(){
     if (window.ethereum) {
@@ -50,11 +49,14 @@ function AddressBar (props) {
     setCurrentAccount(accounts[0]);
   }  
 
+  function refresh(){
+    window.location.reload()
+  }
+
   let checkUserSeeds = useCallback (async()=>{
 
     console.log("your personal SeedsID")
     let seedArray = []
-
     let counter = await deployedContract.methods.uploadAndDownloadCounter(currentAccount).call()
 
     // var len = 0
@@ -81,8 +83,9 @@ function AddressBar (props) {
     <nav style={style}>
         <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
-            <small className="text-black"><span id="account">{"Your Address:" + currentAccount}</span></small>
-            <button style={buttonStyle} onClick={checkUserSeeds}>Personal Seeds</button>
+            <small className="text-black"><span id="account">{"Your Address:" + currentAccount}</span></small>&nbsp;&nbsp;&nbsp;
+            <button onClick={checkUserSeeds}>Personal Seeds</button>&nbsp;
+            <button onClick={refresh}>Reload</button>
             </li>
         </ul>
     </nav> 
