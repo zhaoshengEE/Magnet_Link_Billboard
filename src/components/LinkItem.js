@@ -1,20 +1,35 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {AppContext} from "./App";
 
 const azure = '#f0ffff';
 const lightgreen = '#90ee90';
 
-const SeedItem = (props) => {
+const LinkItem = (props) => {
+    const appContext =useContext(AppContext)
+    const linkItemClickHandler=appContext.linkItemClickHandler
+
     const seedInfo=props.seedInfo;
     const [color, setColor] = useState(azure);
-    const newColor = color == azure ? lightgreen : azure;
+
+    useEffect(()=>{
+        console.log("useEffect")
+        if(props.selected) {
+            setColor(lightgreen)
+        }else {
+            setColor(azure)
+        }
+    },[props.selected])
+
+
 
     return (
-        <tr style={{backgroundColor: color}}>
-            <td onClick={()=>setColor(newColor)}> {seedInfo.seedId} </td>
-            <td onClick={()=>setColor(newColor)}> name: {seedInfo.seedName} </td>
-            <td onClick={()=>setColor(newColor)}> keyWords: {seedInfo.keyWords} </td>
-            <td onClick={()=>setColor(newColor)}> seedDescription: {seedInfo.seedDescription} </td>
-            <td onClick={()=>setColor(newColor)}> endorseAmount: {seedInfo.endorseAmount} </td>
+        <tr style={{backgroundColor: color}} onClick={()=>linkItemClickHandler(seedInfo)}>
+            <td> {seedInfo.seedId} </td>
+            <td> name: {seedInfo.seedName} </td>
+            <td> keyWords: {seedInfo.keyWords} </td>
+            <td> seedDescription: {seedInfo.seedDescription} </td>
+            <td> Charge Amount: {seedInfo.chargeAmount} </td>
+            <td> endorseAmount: {seedInfo.endorseAmount} </td>
 
 
         </tr>
@@ -23,4 +38,4 @@ const SeedItem = (props) => {
     );
 };
 
-export default SeedItem;
+export default LinkItem;

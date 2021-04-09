@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Web3 from "web3";
+import React, { useCallback, useEffect, useContext } from 'react';
+
+import {AppContext} from "./App";
 
 
 const style={
@@ -7,51 +8,10 @@ const style={
 }
 
 function AddressBar (props) {
+   const appContext =useContext(AppContext)
+  const currentAccount=appContext.currentAccount
+  const deployedContract = appContext.deployedContract
 
-  const [currentAccount,setCurrentAccount]=useState(null)
-  const deployedContract = props.deployedContract
-  
-  
-
-  useEffect( ()=>{
-    
-    (async ()=>{
-      
-      await getWeb3ProviderAndWebSocket()
-      await connectToContract()
-      // await window.location.reload()
-
-      setInterval(connectToContract,1000)
-      
-    })()
-  },[props.deployedContract])
-
-  async function getWeb3ProviderAndWebSocket(){
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
-      await window.ethereum.enable();
-    }
-    else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider);
-    }
-    else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
-    }
-    window.web3Socket = new Web3("wss://rinkeby.infura.io/ws/v3/4770b93234ff418e8c15c8f67b45d41a");
-    if(!window.web3Socket){
-      window.alert('Please make sure your wss copied from Infura is correct.')
-    }
-  }
-
-  async function connectToContract(){
-    const web3 = window.web3;
-    const accounts = await web3.eth.getAccounts();
-    setCurrentAccount(accounts[0]);
-  }  
-
-  function refresh(){
-    window.location.reload()
-  }
 
   let checkUserSeeds = useCallback (async()=>{
 
@@ -59,11 +19,6 @@ function AddressBar (props) {
     let seedArray = []
     let counter = await deployedContract.methods.uploadAndDownloadCounter(currentAccount).call()
 
-    // var len = 0
-    // for (var j in counter)
-    // len ++
-    // console.log (len)
-    // console.log(props.account)
     console.log(counter)
 
     for (let i=0; i<counter; i++) {
@@ -74,18 +29,21 @@ function AddressBar (props) {
     console.log(seedArray.toString())
     alert("your personal SeedID:  " + seedArray.toString())
 
-  },[props.deployedContract])
+  },[deployedContract,currentAccount])
 
 
 
 
     return (
-    <nav style={style}>
-        <ul className="navbar-nav px-3">
-            <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
-            <small className="text-black"><span id="account">{"Your Address:" + currentAccount}</span></small>&nbsp;&nbsp;&nbsp;
-            <button onClick={checkUserSeeds}>Personal Seeds</button>&nbsp;
-            <button onClick={refresh}>Reload</button>
+    <nav style={style} >
+        <ul className="nav">
+            <li className="nav-item">
+              <small className="text-black"><span id="account">{"Your Address:" + currentAccount}</span></small>
+              &nbsp;&nbsp;
+            </li>
+            <li className="nav-item">
+              <button onClick={checkUserSeeds}>Personal Seeds</button>
+              &nbsp;&nbsp;
             </li>
         </ul>
     </nav> 
