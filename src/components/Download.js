@@ -33,7 +33,8 @@ class Download extends Component{
       let seedLink = await deployedContract.methods.download(selectedSeed.seedId).send({from: currentAccount, value: charge, gas: gasAmount })
       //let downloadResult = await this.props.deployedContract.methods.download.call(selectSID.value, {from: this.props.account, value: charge, gas: gasAmount});
       .once('receipt', async(receipt)=>{
-          let res=await this.props.deployedContract.methods.getLink(selectedSeed.seedId).call()
+          // let res=await this.props.deployedContract.methods.getLink(selectedSeed.seedId).call()
+          let res=await deployedContract.methods.getLink(selectedSeed.seedId).call();
           this.setState({seed:seedLink});
           this.setState({loading:false});
           alert("Your link is: "+ res);
