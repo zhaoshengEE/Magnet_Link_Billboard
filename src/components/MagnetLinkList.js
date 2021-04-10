@@ -1,8 +1,9 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import LinkItem from "./LinkItem";
 import {AppContext} from "./App";
+import {Pagination} from "@material-ui/lab";
 
-
+const itemsPerPage=10
 function MagnetLinkList(props) {
     const appContext =useContext(AppContext)
     const deployedContract=appContext.deployedContract
@@ -10,6 +11,8 @@ function MagnetLinkList(props) {
     const getSeedInfosFromContract=appContext.getSeedInfosFromContract
     const seedInfos=appContext.seedInfos
 
+    const pageCount=Math.ceil(seedInfos.length/itemsPerPage)
+    const [currentPage,setCurrentPage]=useState(1)
     useEffect( ()=>{
         let timer
         (async ()=>{
@@ -29,15 +32,20 @@ function MagnetLinkList(props) {
 
     },[deployedContract])
 
-
-
+    let thisPageItems=[]
+    let startIndex=(currentPage-1)*itemsPerPage
+    let endIndex=startIndex+itemsPerPage
+    //per page items : [startIndex,endIndex)
+    for(let i=startIndex; i<Math.min(seedInfos.length,endIndex);i++){
+        thisPageItems.push(seedInfos[i])
+    }
 
     return (
         <div className="row">
             <table className="table table-striped table-responsive-md">
                 <tbody>
                 {
-                    seedInfos?.map(
+                    thisPageItems?.map(
                         (seedInfo)=> {
                             if (seedInfo.seedId==selectedSeed.seedId){
                                return <LinkItem key={seedInfo.seedId} seedInfo={seedInfo}  selected={true}></LinkItem>
@@ -53,6 +61,11 @@ function MagnetLinkList(props) {
 
                 </tbody>
             </table>
+
+            <Pagination count={pageCount}
+                        page={currentPage}
+                        onChange={(event, value) => {setCurrentPage(value)}}
+            ></Pagination>
 
 
         </div>

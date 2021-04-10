@@ -140,32 +140,30 @@ function App() {
           <div className="d-flex justify-content-center"><h2>Magnet Link Billboard</h2></div>
         </div>
 
-        <div className="nav d-flex justify-content-between">
-          <Link className="nav-link"  to="/user">User Center</Link>
-          <Link  to={{pathname:"/billboard"}} >Billboard</Link>
-          <Link to="/upload">Upload Seed</Link>
-          <Link to="/download">Download Seed</Link>
-        </div>
+        {/*<div className="nav d-flex justify-content-between">*/}
+        {/*  <Link className="nav-link"  to="/user">User Center</Link>*/}
+        {/*  <Link  to={{pathname:"/billboard"}} >Billboard</Link>*/}
+        {/*  <Link to="/upload">Upload Seed</Link>*/}
+        {/*  <Link to="/download">Download Seed</Link>*/}
+        {/*</div>*/}
 
-        <div className="panel">
-          <Switch>
-            <div className="panel-body">
-              <Route path="/user" component={AddressBar}/>
-              <Route path="/(billboard|)" component={MagnetLinkList}/>
-                <Route path="/upload" component={Upload}/>
-              <Route path="/download" component={Download}/>
-            </div>
-          </Switch>
-        </div>
-
-
-        
+        {/*<div className="panel">*/}
+        {/*  <Switch>*/}
+        {/*    <div className="panel-body">*/}
+        {/*      <Route path="/user" component={AddressBar}/>*/}
+        {/*      <Route path="/(billboard|)" component={MagnetLinkList}/>*/}
+        {/*        <Route path="/upload" component={Upload}/>*/}
+        {/*      <Route path="/download" component={Download}/>*/}
+        {/*    </div>*/}
+        {/*  </Switch>*/}
+        {/*</div>*/}
 
 
-                  {/*<AddressBar></AddressBar>*/}
-                  {/*<MagnetLinkList></MagnetLinkList>*/}
-                  {/*<Upload> </Upload>*/}
-                  {/*  <Download></Download>*/}
+
+          <AddressBar></AddressBar>
+          <MagnetLinkList></MagnetLinkList>
+          <Upload> </Upload>
+          <Download></Download>
 
        </div>
  </AppContext.Provider>
