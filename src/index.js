@@ -3,9 +3,12 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css'
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
-ReactDOM.render(
+import {BrowserRouter} from 'react-router-dom';
 
-    <App />,
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
