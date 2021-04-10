@@ -5,6 +5,8 @@ import AddressBar from "./AddressBar";
 import MagnetLinkList from "./MagnetLinkList";
 import Download from './Download';
 import Upload from "./Upload";
+import {Link,Route,Switch} from 'react-router-dom';
+
 
 export const AppContext=React.createContext({})
 
@@ -131,12 +133,40 @@ function App() {
             linkItemClickHandler: linkItemClickHandler,
             getSeedInfosFromContract: getSeedInfosFromContract
         }}>
-            <div className="container">
+
+      <div>
+
+        <div>
+          <div className="page-header"><h2>Magnet Link Billboard</h2></div>
+        </div>
+
+        <div className="list-group-item">
+          <Link className="list-group-item" to="/user">User Center</Link>
+          <Link className="list-group-item" to={{pathname:"/billboard"}} >Billboard</Link>
+          <Link className="list-group-item" to="/upload">Upload Seed</Link>
+          <Link className="list-group-item" to="/download">Download Seed</Link>
+        </div>
+
+        <div className="panel">
+          <Switch>
+            <div className="panel-body">
+              <Route path="/user" component={AddressBar}/>
+              <Route path="/billboard" component={MagnetLinkList}/>
+              <Route path="/upload" component={Upload}/>
+              <Route path="/download" component={Download}/>
+            </div>
+          </Switch>
+        </div>
+      </div>
+
+        
+
+            {/* <div className="container">
                   <AddressBar></AddressBar>
                   <MagnetLinkList></MagnetLinkList>
                   <Upload> </Upload>
                     <Download></Download>
-            </div>
+            </div> */}
         </AppContext.Provider>
     );
 };
