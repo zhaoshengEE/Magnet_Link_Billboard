@@ -2,10 +2,7 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import LinkItem from "./LinkItem";
 import {AppContext} from "./App";
 
-const style={
 
-    border: "1px solid black"
-}
 function MagnetLinkList(props) {
     const appContext =useContext(AppContext)
     const deployedContract=appContext.deployedContract
@@ -36,8 +33,8 @@ function MagnetLinkList(props) {
 
 
     return (
-        <div className="table table-striped table-responsive-md">
-            <table style={style}>
+        <div className="row">
+            <table className="table table-striped table-responsive-md">
                 <tbody>
                 {
                     seedInfos?.map(

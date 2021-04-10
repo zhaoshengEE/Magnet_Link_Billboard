@@ -35,10 +35,10 @@ function AddressBar (props) {
 
 
     return (
-    <nav style={style} >
+    <nav className="row p-2 "  style={style}>
         <ul className="nav">
             <li className="nav-item">
-              <small className="text-black"><span id="account">{"Your Address:" + currentAccount}</span></small>
+             <span id="account">{"Your Address:" + currentAccount}</span>
               &nbsp;&nbsp;
             </li>
             <li className="nav-item">
