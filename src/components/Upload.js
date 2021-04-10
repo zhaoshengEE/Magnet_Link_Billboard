@@ -22,6 +22,9 @@ const Upload = (props) => {
         let keyWords=inputKeyWords.current.value
         let chargeAmount=inputChargeAmount.current.value
         let seedDescription=inputSeedDescription.current.value
+        console.log("uploadSeedToContract----------------------")
+        console.log(seedName,seedLink,keyWords,chargeAmount,seedDescription)
+
         let uploadHandler=await deployedContract.methods.upload(seedName, seedLink, keyWords, chargeAmount, seedDescription)
 
         const gasAmount = await uploadHandler.estimateGas({from: currentAccount})
@@ -30,13 +33,15 @@ const Upload = (props) => {
         uploadHandler.send({from: currentAccount, gas: gasAmount,gasPrice:gasPrice*1.01})
             .once('receipt', async (receipt)=> {
 
-                console.log(receipt)
-                inputSeedName.current.value=""
-                inputSeedLink.current.value=""
-                inputKeyWords.current.value=""
-                inputChargeAmount.current.value="0"
-                inputSeedDescription.current.value=""
-                 await getSeedInfosFromContract(true)
+                if(inputSeedName.current){
+                    inputSeedName.current.value=""
+                    inputSeedLink.current.value=""
+                    inputKeyWords.current.value=""
+                    inputChargeAmount.current.value="0"
+                    inputSeedDescription.current.value=""
+                }
+
+                await getSeedInfosFromContract(true)
             })
 
 
@@ -45,11 +50,11 @@ const Upload = (props) => {
 
             <div style={style} className="row row-cols-md-2 p-3">
 
-                    <p>Seed Name: <input type="text" ref={inputSeedName}/></p>
-                    <p>Seed Link: <input type="text" ref={inputSeedLink}/></p>
-                    <p>KeyWords: <input type="text" ref={inputKeyWords}/></p>
-                    <p>ChargeAmount: <input type="text" defaultValue="0" ref={inputChargeAmount}/></p>
-                    <p>SeedDescription: <input type="text" ref={inputSeedDescription}/></p>
+                    <p>Seed Name: <input  ref={inputSeedName}/></p>
+                    <p>Seed Link: <input  ref={inputSeedLink}/></p>
+                    <p>KeyWords: <input  ref={inputKeyWords}/></p>
+                    <p>ChargeAmount: <input  defaultValue="0" ref={inputChargeAmount}/></p>
+                    <p>SeedDescription: <input  ref={inputSeedDescription}/></p>
                     <p><button onClick={uploadSeedToContract}>upload</button></p>
 
 

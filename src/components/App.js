@@ -134,41 +134,43 @@ function App() {
             getSeedInfosFromContract: getSeedInfosFromContract
         }}>
 
-      <div>
+      <div className="container">
 
         <div>
-          <div className="page-header"><h2>Magnet Link Billboard</h2></div>
+          <div className="d-flex justify-content-center"><h2>Magnet Link Billboard</h2></div>
         </div>
 
-        <div className="list-group-item">
-          <Link className="list-group-item" to="/user">User Center</Link>
-          <Link className="list-group-item" to={{pathname:"/billboard"}} >Billboard</Link>
-          <Link className="list-group-item" to="/upload">Upload Seed</Link>
-          <Link className="list-group-item" to="/download">Download Seed</Link>
+        <div className="nav d-flex justify-content-between">
+          <Link className="nav-link"  to="/user">User Center</Link>
+          <Link  to={{pathname:"/billboard"}} >Billboard</Link>
+          <Link to="/upload">Upload Seed</Link>
+          <Link to="/download">Download Seed</Link>
         </div>
 
         <div className="panel">
           <Switch>
             <div className="panel-body">
               <Route path="/user" component={AddressBar}/>
-              <Route path="/billboard" component={MagnetLinkList}/>
-              <Route path="/upload" component={Upload}/>
+              <Route path="/(billboard|)" component={MagnetLinkList}/>
+                <Route path="/upload" component={Upload}/>
               <Route path="/download" component={Download}/>
             </div>
           </Switch>
         </div>
-      </div>
+
 
         
 
-            {/* <div className="container">
-                  <AddressBar></AddressBar>
-                  <MagnetLinkList></MagnetLinkList>
-                  <Upload> </Upload>
-                    <Download></Download>
-            </div> */}
-        </AppContext.Provider>
-    );
+
+                  {/*<AddressBar></AddressBar>*/}
+                  {/*<MagnetLinkList></MagnetLinkList>*/}
+                  {/*<Upload> </Upload>*/}
+                  {/*  <Download></Download>*/}
+
+       </div>
+ </AppContext.Provider>
+
+);
 };
 
 export default App;
