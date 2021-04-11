@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 
 import {AppContext} from "./App";
 
