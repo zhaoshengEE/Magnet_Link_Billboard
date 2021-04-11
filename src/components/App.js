@@ -162,7 +162,6 @@ function App() {
 
           <AddressBar></AddressBar>
           <MagnetLinkList></MagnetLinkList>
-          <Upload> </Upload>
           <Download></Download>
 
        </div>
