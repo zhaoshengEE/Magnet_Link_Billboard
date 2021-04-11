@@ -41,34 +41,55 @@ function MagnetLinkList(props) {
     }
 
     return (
-        <div className="row">
-            <table className="table table-striped table-responsive-md">
-                <tbody>
-                {
-                    thisPageItems?.map(
-                        (seedInfo)=> {
-                            if (seedInfo.seedId==selectedSeed.seedId){
-                               return <LinkItem key={seedInfo.seedId} seedInfo={seedInfo}  selected={true}></LinkItem>
+        <div>
+            <div className="row">
+                <table className=" table table-striped table-responsive-md">
+                    <tbody>
+                    <tr>
+                        <td>Id</td>
+                        <td>Name</td>
+                        <td>Keywords</td>
+                        <td>Seed Description</td>
+                        <td>Charge Amount</td>
+                        <td>Endorse Amount</td>
 
-                            }else {
-                                return  <LinkItem key={seedInfo.seedId} seedInfo={seedInfo}  selected={false}></LinkItem>
 
+                    </tr>
+                    {
+
+                        thisPageItems?.map(
+                            (seedInfo)=> {
+                                if (seedInfo.seedId==selectedSeed.seedId){
+                                   return <LinkItem key={seedInfo.seedId} seedInfo={seedInfo}  selected={true}></LinkItem>
+
+                                }else {
+                                    return  <LinkItem key={seedInfo.seedId} seedInfo={seedInfo}  selected={false}></LinkItem>
+
+                                }
                             }
-                        }
-                    )
-                }
+                        )
+                    }
+
+                    </tbody>
+                </table>
+            </div>
+            <div  className="row justify-content-center">
+
+                <Pagination
+                    size="large"
+                    count={pageCount}
+                    page={currentPage}
+                    onChange={(event, value) => {setCurrentPage(value)}}
+                ></Pagination>
 
 
-                </tbody>
-            </table>
 
-            <Pagination count={pageCount}
-                        page={currentPage}
-                        onChange={(event, value) => {setCurrentPage(value)}}
-            ></Pagination>
-
-
+            </div>
         </div>
+
+
+
+
     );
 };
 

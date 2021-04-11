@@ -25,11 +25,11 @@ const LinkItem = (props) => {
     return (
         <tr style={{backgroundColor: color}} onClick={()=>linkItemClickHandler(seedInfo)}>
             <td> {seedInfo.seedId} </td>
-            <td> name: {seedInfo.seedName} </td>
-            <td> keyWords: {seedInfo.keyWords} </td>
-            <td> seedDescription: {seedInfo.seedDescription} </td>
-            <td> Charge Amount: {seedInfo.chargeAmount} </td>
-            <td> endorseAmount: {seedInfo.endorseAmount} </td>
+            <td> {seedInfo.seedName} </td>
+            <td> {seedInfo.keyWords} </td>
+            <td>  {seedInfo.seedDescription} </td>
+            <td>   {seedInfo.chargeAmount} </td>
+            <td> {seedInfo.endorseAmount} </td>
 
 
         </tr>

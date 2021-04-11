@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 
 import {AppContext} from "./App";
 import {Button} from "@material-ui/core";
@@ -14,30 +14,48 @@ function AddressBar (props) {
   const appContext =useContext(AppContext)
   const currentAccount=appContext.currentAccount
   const deployedContract = appContext.deployedContract
+    const seedInfos=appContext.seedInfos
 
-    const [personalSeedsContent, setPersonalSeedsContent]=useState("")
+
+    const [personalSeeds, setPersonalSeeds]=useState([])
     const [personalSeedsOpen, setPersonalSeedsOpen]=useState(false)
     const [uploadSeedsOpen, setUploadSeedsOpen]=useState(false)
 
+    useEffect(()=>{
+        (async ()=>{
+            await checkUserSeeds()
 
-  let checkUserSeeds = useCallback (async()=>{
+        })()
+    },[currentAccount,seedInfos])
 
-    console.log("your personal SeedsID")
-    let seedArray = []
-    let counter = await deployedContract.methods.uploadAndDownloadCounter(currentAccount).call()
 
-    console.log(counter)
 
-    for (let i=0; i<counter; i++) {
-      let personalSeeds = await deployedContract.methods.OwnerSeedsSummary(currentAccount,i).call()
-      seedArray.push(personalSeeds)
-    }
+  let checkUserSeeds =async()=>{
+      if (deployedContract&&seedInfos.length>0){
+          console.log("your personal SeedsID")
+          let seedArray = []
+          let counter = await deployedContract.methods.uploadAndDownloadCounter(currentAccount).call()
 
-    console.log(seedArray.toString())
-    setPersonalSeedsOpen(true)
-    setPersonalSeedsContent("your personal SeedID:  " + seedArray.toString())
+          console.log(counter)
 
-  },[deployedContract,currentAccount])
+          for (let i=0; i<counter; i++) {
+              let id = await deployedContract.methods.OwnerSeedsSummary(currentAccount,i).call()
+              let link=await deployedContract.methods.getLink(id).call();
+
+                //seedInfos 的index 和 链上存储的 index差1
+              seedArray.push({id,name: seedInfos[id-1].seedName,link})
+          }
+          seedArray.sort((seed1,seed2)=>{
+              return seed1.id-seed2.id
+          })
+          console.log(seedArray)
+
+          setPersonalSeeds(seedArray)
+      }
+
+
+
+  }
 
 
 
@@ -53,7 +71,7 @@ function AddressBar (props) {
                       &nbsp;&nbsp;
                     </li>
                     <li className="nav-item">
-                      <Button onClick={checkUserSeeds}  variant="contained">Personal Seeds</Button>
+                      <Button onClick={()=>setPersonalSeedsOpen(true)}  variant="contained">Personal Seeds</Button>
                       &nbsp;&nbsp;
                     </li>
 
@@ -67,7 +85,7 @@ function AddressBar (props) {
 
             <PersonalSeeds open={personalSeedsOpen}
                            handleClose={()=>setPersonalSeedsOpen(false)}
-                           personalSeedsContent={personalSeedsContent}>
+                           personalSeeds={personalSeeds}>
             </PersonalSeeds>
 
             <Upload open={uploadSeedsOpen}

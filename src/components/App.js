@@ -6,6 +6,7 @@ import MagnetLinkList from "./MagnetLinkList";
 import Download from './Download';
 import Upload from "./Upload";
 import {Link,Route,Switch} from 'react-router-dom';
+import {withMobileDialog} from "@material-ui/core";
 
 
 export const AppContext=React.createContext({})
@@ -56,12 +57,27 @@ function App() {
 
 
   useEffect( ()=>{
+      document.title = "Magnet Link Billboard"
+      console.log(`   
+  __  __                        _     _      _       _      ____  _ _ _ _                         _ 
+ |  \\/  |                      | |   | |    (_)     | |    |  _ \\(_) | | |                       | |
+ | \\  / | __ _  __ _ _ __   ___| |_  | |     _ _ __ | | __ | |_) |_| | | |__   ___   __ _ _ __ __| |
+ | |\\/| |/ _\` |/ _\` | '_ \\ / _ \\ __| | |    | | '_ \\| |/ / |  _ <| | | | '_ \\ / _ \\ / _\` | '__/ _\` |
+ | |  | | (_| | (_| | | | |  __/ |_  | |____| | | | |   <  | |_) | | | | |_) | (_) | (_| | | | (_| |
+ |_|  |_|\\__,_|\\__, |_| |_|\\___|\\__| |______|_|_| |_|_|\\_\\ |____/|_|_|_|_.__/ \\___/ \\__,_|_|  \\__,_|
+                __/ |                                                                               
+               |___/                                                                                
+  
+      `);
     (async ()=>{
       await getWeb3ProviderAndWebSocket()
       await  getCurrentAccount()
       await connectToContract()
 
+
     })()
+
+
   },[])
 
   async function getWeb3ProviderAndWebSocket(){
@@ -87,6 +103,7 @@ function App() {
       window.ethereum.on('accountsChanged', function (accounts) {
           setCurrentAccount(accounts[0]);
       })
+
   }
 
   async function connectToContract(){

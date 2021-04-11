@@ -70,16 +70,12 @@ const Upload = (props) => {
                         occasionally.
                     </DialogContentText>
 
-                    {/*<p>Seed Name: <input  ref={inputSeedName}/></p>*/}
-                    {/*<p>Seed Link: <input  ref={inputSeedLink}/></p>*/}
-                    {/*<p>KeyWords: <input  ref={inputKeyWords}/></p>*/}
-                    {/*<p>ChargeAmount: <input  defaultValue="0" ref={inputChargeAmount}/></p>*/}
-                    {/*<p>SeedDescription: <input  ref={inputSeedDescription}/></p>*/}
-                    <TextField  inputRef={inputSeedName} autoFocus margin="dense" id="name" label="Seed Name" type="text" fullWidth/>
-                    <TextField  inputRef={inputSeedLink} autoFocus margin="dense" id="name" label="Seed Link" type="text" fullWidth/>
-                    <TextField  inputRef={inputKeyWords} autoFocus margin="dense" id="name" label="Key Words " type="text" fullWidth/>
-                    <TextField  inputRef={inputChargeAmount} defaultValue="0" autoFocus margin="dense" id="name" label="Charge Amount" type="text" fullWidth/>
-                    <TextField  inputRef={inputSeedDescription} autoFocus margin="dense" id="name" label="Seed Description" type="text" fullWidth/>
+
+                    <TextField  inputRef={inputSeedName} autoFocus margin="dense" id="inputSeedName" label="Seed Name" type="text" fullWidth/>
+                    <TextField  inputRef={inputSeedLink} autoFocus margin="dense" id="inputSeedLink" label="Seed Link" type="text" fullWidth/>
+                    <TextField  inputRef={inputKeyWords} autoFocus margin="dense" id="inputKeyWords" label="Key Words " type="text" fullWidth/>
+                    <TextField  inputRef={inputChargeAmount} defaultValue="0" autoFocus margin="dense" id="inputChargeAmount" label="Charge Amount" type="text" fullWidth/>
+                    <TextField  inputRef={inputSeedDescription} autoFocus margin="dense" id="inputSeedDescription" label="Seed Description" type="text" fullWidth/>
 
                 </DialogContent>
                 <DialogActions>
