@@ -1,8 +1,10 @@
 # Magnet_Link_Billboard
 
+frontend url: https://www.magnetlinkbillboard.com/
+
 https://infura.io/dashboard/ethereum/4770b93234ff418e8c15c8f67b45d41a/settings
 
-Contract address (Rinkeby): 0xA64c0a2f02994F42Fcf4E45b325c97AbcAEFAeE7
+
 https://rinkeby.infura.io/v3/4770b93234ff418e8c15c8f67b45d41a
 wss://rinkeby.infura.io/ws/v3/4770b93234ff418e8c15c8f67b45d41a
 前端界面只显示magnetItemsPublicInfo，
