@@ -9,6 +9,9 @@ function MagnetLinkList(props) {
     const deployedContract=appContext.deployedContract
     const selectedSeed=appContext.selectedSeed
     const getSeedInfosFromContract=appContext.getSeedInfosFromContract
+    const getContractBalance=appContext.getContractBalance
+
+
     const seedInfos=appContext.seedInfos
 
     const pageCount=Math.ceil(seedInfos.length/itemsPerPage)
@@ -20,7 +23,11 @@ function MagnetLinkList(props) {
             if(deployedContract){
                 await getSeedInfosFromContract(true)
 
-                timer= setInterval(()=>getSeedInfosFromContract(false),2000)
+                timer= setInterval(async ()=>{
+                         getContractBalance()
+                         getSeedInfosFromContract(false)
+                }
+                ,1000)
             }
 
 

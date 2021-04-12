@@ -21,17 +21,23 @@ const Upload = (props) => {
     const inputSeedName = useRef(null);
     const inputSeedLink = useRef(null);
     const inputKeyWords = useRef(null);
-    const inputChargeAmount = useRef(0);
+    const inputChargeAmount = useRef(null);
     const inputSeedDescription = useRef(null);
 
     const uploadSeedToContract= useCallback(async ()=>{
 
         const web3 = window.web3;
-        let seedName=inputSeedName.current.value
-        let seedLink=inputSeedLink.current.value
-        let keyWords=inputKeyWords.current.value
-        let chargeAmount=inputChargeAmount.current.value
-        let seedDescription=inputSeedDescription.current.value
+        let seedName=inputSeedName.current.value.trim()
+        let seedLink=inputSeedLink.current.value.trim()
+        let keyWords=inputKeyWords.current.value.trim()
+        let chargeAmount=inputChargeAmount.current.value.trim()
+        let seedDescription=inputSeedDescription.current.value.trim()
+
+
+        if(!(seedName&&seedLink&&keyWords&&isNumber(chargeAmount)&&seedDescription)){
+
+            return
+        }
 
         let uploadHandler=await deployedContract.methods.upload(seedName, seedLink, keyWords, chargeAmount, seedDescription)
 
@@ -58,24 +64,29 @@ const Upload = (props) => {
 
     },[currentAccount,deployedContract])
 
+    function isNumber(str) {
+        if (typeof str != "string") return false
+        return !isNaN(str) &&
+            !isNaN(parseFloat(str))
+    }
+
     return (
 
         <div>
 
             <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+                <DialogTitle id="form-dialog-title">Upload new seed</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We will send updates
-                        occasionally.
+                        Please enter the following information to upload the new magnetic link.
                     </DialogContentText>
 
 
-                    <TextField  inputRef={inputSeedName} autoFocus margin="dense" id="inputSeedName" label="Seed Name" type="text" fullWidth/>
-                    <TextField  inputRef={inputSeedLink} autoFocus margin="dense" id="inputSeedLink" label="Seed Link" type="text" fullWidth/>
-                    <TextField  inputRef={inputKeyWords} autoFocus margin="dense" id="inputKeyWords" label="Key Words " type="text" fullWidth/>
-                    <TextField  inputRef={inputChargeAmount} defaultValue="0" autoFocus margin="dense" id="inputChargeAmount" label="Charge Amount" type="text" fullWidth/>
-                    <TextField  inputRef={inputSeedDescription} autoFocus margin="dense" id="inputSeedDescription" label="Seed Description" type="text" fullWidth/>
+                    <TextField  required  inputRef={inputSeedName}  autoFocus margin="dense" id="inputSeedName" label="Seed Name" type="text" fullWidth/>
+                    <TextField required inputRef={inputSeedLink}  margin="dense" id="inputSeedLink" label="Seed Link" type="text" fullWidth/>
+                    <TextField  required inputRef={inputKeyWords}  margin="dense" id="inputKeyWords" label="Key Words " type="text" fullWidth/>
+                    <TextField  required inputRef={inputChargeAmount}  defaultValue="0"  margin="dense" id="inputChargeAmount" label="Charge Amount" type="text" fullWidth/>
+                    <TextField  required inputRef={inputSeedDescription}   margin="dense" id="inputSeedDescription" label="Seed Description" type="text" fullWidth/>
 
                 </DialogContent>
                 <DialogActions>

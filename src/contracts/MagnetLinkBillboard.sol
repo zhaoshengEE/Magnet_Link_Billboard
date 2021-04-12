@@ -89,8 +89,11 @@ contract MagnetLinkBillboard {
             }
         }
         require(!exist, "you have already download");
-        _uploader.transfer(_seed.chargeAmount*9/10); //give 0.9 to downloader; 0.1 remains in contract
-        msg.sender.transfer(msg.value - _seed.chargeAmount); //return extra money
+        uint moneyToUploader=_seed.chargeAmount*1e17*9;
+        uint moneyToContract=_seed.chargeAmount*1e17;
+
+    _uploader.transfer(moneyToUploader); //give 0.9 to downloader; 0.1 remains in contract
+        msg.sender.transfer(msg.value - moneyToUploader-moneyToContract); //return extra money
         OwnerSeedsSummary[msg.sender].push(magnetItemsPublicInfo[_seedId].seedId);
         SeedsOwnerSummary[magnetItemsPublicInfo[_seedId].seedId].push(msg.sender);
         endorseableSeedsSummary[msg.sender].push(magnetItemsPublicInfo[_seedId].seedId);

@@ -39,7 +39,9 @@ function App() {
       * */
     const [seedInfos,setSeedInfos] = useState([]);
     const [currentAccount,setCurrentAccount]=useState(null)
-   const [deployedContract,setDeployedContract]=useState(null)
+    const [contractBalance,setContractBalance] = useState(0);
+
+    const [deployedContract,setDeployedContract]=useState(null)
    const [selectedSeed,setSelectedSeed] = useState(
         {
             seedName: "",
@@ -61,8 +63,8 @@ function App() {
       console.log(`   
   __  __                        _     _      _       _      ____  _ _ _ _                         _ 
  |  \\/  |                      | |   | |    (_)     | |    |  _ \\(_) | | |                       | |
- | \\  / | __ _  __ _ _ __   ___| |_  | |     _ _ __ | | __ | |_) |_| | | |__   ___   __ _ _ __ __| |
- | |\\/| |/ _\` |/ _\` | '_ \\ / _ \\ __| | |    | | '_ \\| |/ / |  _ <| | | | '_ \\ / _ \\ / _\` | '__/ _\` |
+            | \\  / | __ _  __ _ _ __   ___| |_  | |     _ _ __ | | __ | |_) |_| | | |__   ___   __ _ _ __ __| |
+            | |\\/| |/ _\` |/ _\` | '_ \\ / _ \\ __| | |    | | '_ \\| |/ / |  _ <| | | | '_ \\ / _ \\ / _\` | '__/ _\` |
  | |  | | (_| | (_| | | | |  __/ |_  | |____| | | | |   <  | |_) | | | | |_) | (_) | (_| | | | (_| |
  |_|  |_|\\__,_|\\__, |_| |_|\\___|\\__| |______|_|_| |_|_|\\_\\ |____/|_|_|_|_.__/ \\___/ \\__,_|_|  \\__,_|
                 __/ |                                                                               
@@ -74,57 +76,76 @@ function App() {
       await  getCurrentAccount()
       await connectToContract()
 
-
     })()
 
 
   },[])
 
-  async function getWeb3ProviderAndWebSocket(){
+    useEffect(()=>{
+        (async ()=>{
+            await getContractBalance()
+        })()
+
+    },[deployedContract])
+
+async function getWeb3ProviderAndWebSocket(){
     if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
-      await window.ethereum.enable();
+        window.web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
     }
     else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider);
+        window.web3 = new Web3(window.web3.currentProvider);
     }
     else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
     }
     // window.web3Socket = new Web3("wss://rinkeby.infura.io/ws/v3/4770b93234ff418e8c15c8f67b45d41a");
     // if(!window.web3Socket){
     //   window.alert('Please make sure your wss copied from Infura is correct.')
     // }
-  }
+}
 
-  async function getCurrentAccount() {
-       const accounts = await window.web3.eth.getAccounts();
-      setCurrentAccount(accounts[0]);
-      window.ethereum.on('accountsChanged', function (accounts) {
-          setCurrentAccount(accounts[0]);
-      })
+async function getCurrentAccount() {
+    const accounts = await window.web3.eth.getAccounts();
+    setCurrentAccount(accounts[0]);
+    window.ethereum.on('accountsChanged', function (accounts) {
+        setCurrentAccount(accounts[0]);
+    })
 
-  }
+}
 
-  async function connectToContract(){
+async function connectToContract(){
     const web3 = window.web3;
     const networkId = await web3.eth.net.getId()
     const networkData = MagnetLinkBillboard.networks[networkId];
 
     if(networkData) {
-      const deployedContractTemp = new web3.eth.Contract(MagnetLinkBillboard.abi, networkData.address);
-      setDeployedContract(()=>deployedContractTemp)
+        const deployedContractTemp = new web3.eth.Contract(MagnetLinkBillboard.abi, networkData.address);
+        setDeployedContract(()=>deployedContractTemp)
     }
 
-  }
+}
 
-    const getSeedInfosFromContract= async (forceToUpdate)=>{
-        console.log("in getSeedInfosFromContract")
-        const seedAmount=await deployedContract.methods.seedAmount().call()
+async function getContractBalance(){
+        if(deployedContract){
+            const web3 = window.web3;
+            let balanceWei=await web3.eth.getBalance(deployedContract.options.address)
+            let newBalance=balanceWei/1e18
+            if(newBalance!=contractBalance){
+                setContractBalance(newBalance)
 
-        if(forceToUpdate||seedAmount>seedInfos.length){
-            let seeds=[]
-            for (let i = 1; i <=seedAmount; i++) {
+            }
+        }
+
+}
+
+const getSeedInfosFromContract= async (forceToUpdate)=>{
+    console.log("in getSeedInfosFromContract")
+    const seedAmount=await deployedContract.methods.seedAmount().call()
+
+    if(forceToUpdate||seedAmount>seedInfos.length){
+        let seeds=[]
+        for (let i = 1; i <=seedAmount; i++) {
                 let res=await deployedContract.methods.magnetItemsPublicInfo(i).call()
                 seeds.push(res)
 
@@ -148,13 +169,15 @@ function App() {
             selectedSeed: selectedSeed,
             seedInfos: seedInfos,
             linkItemClickHandler: linkItemClickHandler,
-            getSeedInfosFromContract: getSeedInfosFromContract
+            getSeedInfosFromContract: getSeedInfosFromContract,
+            getContractBalance:getContractBalance
         }}>
 
       <div className="container">
 
         <div>
           <div className="d-flex justify-content-center"><h2>Magnet Link Billboard</h2></div>
+            <div>Contract Balance: {contractBalance} </div>
         </div>
 
         {/*<div className="nav d-flex justify-content-between">*/}

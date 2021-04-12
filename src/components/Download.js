@@ -88,13 +88,13 @@ class Download extends Component{
             {
                 ({selectedSeed})=>{
                     return (
-                        <div className="row d-flex  mt-2 w-50" >
+                        <div className="row d-flex  mt-2 " >
                         <div className="p-2 ">
                             <p>Selected Seed ID: {selectedSeed.seedId}</p>
                             <p>Seed Name: {selectedSeed.seedName}</p>
                             <p>Charge Amount: {selectedSeed.chargeAmount}</p>
                         </div>
-                            <div className="p-2 ml-auto">
+                            <div className="p-2 ">
                                 <Button variant="contained" onClick={this.showLink}>Download</Button>
                                 <br></br>  <br></br>
                                 <Button variant="contained" onClick={this.endorse}>Endorse</Button>

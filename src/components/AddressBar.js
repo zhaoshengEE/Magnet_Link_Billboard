@@ -30,7 +30,7 @@ function AddressBar (props) {
 
 
 
-  let checkUserSeeds =async()=>{
+  let checkUserSeeds = useCallback(async()=>{
       if (deployedContract&&seedInfos.length>0){
           console.log("your personal SeedsID")
           let seedArray = []
@@ -53,9 +53,7 @@ function AddressBar (props) {
           setPersonalSeeds(seedArray)
       }
 
-
-
-  }
+  },[deployedContract,seedInfos])
 
 
 
