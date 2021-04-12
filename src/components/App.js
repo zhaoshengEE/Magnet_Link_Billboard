@@ -40,6 +40,7 @@ function App() {
     const [seedInfos,setSeedInfos] = useState([]);
     const [currentAccount,setCurrentAccount]=useState(null)
     const [contractBalance,setContractBalance] = useState(0);
+    const [contractAddress,setContractAddress] = useState(0);
 
     const [deployedContract,setDeployedContract]=useState(null)
    const [selectedSeed,setSelectedSeed] = useState(
@@ -122,6 +123,7 @@ async function connectToContract(){
     if(networkData) {
         const deployedContractTemp = new web3.eth.Contract(MagnetLinkBillboard.abi, networkData.address);
         setDeployedContract(()=>deployedContractTemp)
+        setContractAddress(deployedContractTemp.options.address)
     }
 
 }
@@ -173,11 +175,18 @@ const getSeedInfosFromContract= async (forceToUpdate)=>{
             getContractBalance:getContractBalance
         }}>
 
-      <div className="container">
+      <div className="container-md ">
 
         <div>
           <div className="d-flex justify-content-center"><h2>Magnet Link Billboard</h2></div>
-            <div>Contract Balance: {contractBalance} </div>
+            <div className="d-flex">
+                <div className="p-2">Contract Balance: {contractBalance} </div>
+                <div className="p-2 ml-auto"> Contract Address: {contractAddress} (on Rinkeby)  </div>
+
+
+            </div>
+
+
         </div>
 
         {/*<div className="nav d-flex justify-content-between">*/}
