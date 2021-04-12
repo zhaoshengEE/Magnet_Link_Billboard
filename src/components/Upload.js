@@ -34,6 +34,8 @@ const Upload = (props) => {
         let seedDescription=inputSeedDescription.current.value.trim()
 
 
+
+
         if(!(seedName&&seedLink&&keyWords&&isNumber(chargeAmount)&&seedDescription)){
 
             return
