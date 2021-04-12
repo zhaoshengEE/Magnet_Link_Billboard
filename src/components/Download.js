@@ -45,9 +45,13 @@ class Download extends Component{
               })
 
       }catch (e) {
-          let str=e.message.substring(e.message.indexOf("{"))
-          let errorMsg=JSON.parse(str)['originalError']['message']
-          alert(errorMsg)
+          try {
+              let str=e.message.substring(e.message.indexOf("{"))
+
+              let errorMsg=JSON.parse(str)['originalError']['message']
+              alert(errorMsg)
+          }catch (e){}
+
       }
 
 
@@ -74,9 +78,12 @@ class Download extends Component{
                 })
 
         }  catch (e) {
-        let str=e.message.substring(e.message.indexOf("{"))
-        let errorMsg=JSON.parse(str)['originalError']['message']
-        alert(errorMsg)
+          try {
+              let str=e.message.substring(e.message.indexOf("{"))
+              let errorMsg=JSON.parse(str)['originalError']['message']
+              alert(errorMsg)
+          }catch (e){}
+
     }
   }
 

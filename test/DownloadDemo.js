@@ -1,7 +1,10 @@
-const account1Balance=53.2136  //0x65247d1e3ba01cd574ba10814a525e80c5f55a10
-const account2Balance=6.4956   //0x922334bc42f8135f5fff779f4d55460a445d24d4
+
+
+
+const account1Balance=50.9123 //0x65247d1e3ba01cd574ba10814a525e80c5f55a10
+const account2Balance=8.8932   //0x922334bc42f8135f5fff779f4d55460a445d24d4
+const contractBalance=1.8999999998769999
 const chargeAmount=3
-const contractBalance=0.999999999976
 
 
 console.log(
