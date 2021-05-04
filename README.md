@@ -2,22 +2,35 @@
 
 
 ## Authors
-  - Mingyuan Du 
-  - Zijun Wang
-  - Yuhang Xiao
-  - Zhaosheng Li
-
+| - Mingyuan Du  | - Zijun Wang  |
+| - Yuhang Xiao  | - Zhaosheng Li |
 
 ## Table of contents
 
 - [Description](#Description)
+- [Architecture diagram](#Architecture-diagram)
+- [Constraints](#Constraints)
 - [Files in this repo](#Files-in-this-repo)
 - [Front-end URL](#Front-end-URL)
 - [Running the code](#Running-the-code)
 
 ## Description
 
-This is project is about building a decentralized application (DApp). The DApp we propose to create is magnet link billboard, which is a peer-to-peer (P2P) platform that encourages users to share documents without worrying about centralized authority and the location of original files. Each document on the platform is considered as a seed. The user can act as a writer and contribute to the DApp by uploading seeds. Also, the user can become a visitor to the platform by browsing, downloading, or endorsing the seeds on the billboard. The back-end of this work is a smart contract, which guarantees the trustworthy transactions of digital assets and constraints some operations on the online platform.
+This project is about building a decentralized application (DApp). The DApp we propose to create is magnet link billboard, which is a peer-to-peer (P2P) platform that encourages users to share documents without worrying about centralized authority and the location of original files. Each document on the platform is considered as a seed. The user can act as a writer and contribute to the DApp by uploading seeds. Also, the user can become a visitor to the platform by browsing, downloading, or endorsing the seeds on the billboard. The back-end of this work is a smart contract, which guarantees the trustworthy transactions of digital assets and constraints some operations on the online platform.
+
+## Architecture diagram
+This image illustrates the business logic defined by the smart contract at back-end
+
+![Architecture.png](img/Architecture.png)
+
+## Constraints
+Our smart contrat defines the following contraints on this DApp:
+
+- A user shall not download the seeds that are uploaded by himself/hersel
+- A user shall download every single seed only for once
+- A user shall only endorse the seeds he/she has already downloaded
+
+![Constraints.png](img/Constraints.png)
 
 ## Files in this repo
 
@@ -34,6 +47,8 @@ This GitHub repo contains the following folders or files
 + `package.json` and `package-lock.json` list out all the dependencies for this DApp
 
 + `truffle-config.js` is the file when we configure a truffle project at the beginning stage of this work
+
++ `Project_Report.pdf` is the report of this project, which contains a specific user workflow
 
 + `sample_data.txt` is a test seed transmitted to the DApp
 
