@@ -2,7 +2,7 @@
 
 
 ## Authors
-Mingyuan Du &nbsp; Zijun Wang &nbsp; Yuhang Xiao &nbsp; Zhaosheng Li
+* Mingyuan Du &nbsp; * Zijun Wang &nbsp; * Yuhang Xiao &nbsp; * Zhaosheng Li
 
 ## Table of contents
 
