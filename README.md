@@ -71,8 +71,26 @@ git clone https://github.com/zhaoshengEE/Magnet_Link_Billboard.git
 
 3. Delete the two `.json` files in `src/abis`
 
-4. Run the following command on the command line of IDE
+4. Change `Node Version Manager` into the `12.13.0` version
+
+```bash
+nvm use 12.13.0
+```
+
+5. Install all the dependencies
+
+```bash
+npm install
+```
+
+6. Deploy the smart contract and create migration files
 
 ```bash
 truffle migrate --network rinkeby
+```
+
+7. Run the DApp and start your journey on the magnet link billboard
+
+```bash
+npm start
 ```
