@@ -2,8 +2,9 @@
 
 
 ## Authors
-| - Mingyuan Du  | - Zijun Wang  |
-| - Yuhang Xiao  | - Zhaosheng Li |
+| ------------- | ------------- |
+| - Mingyuan Du | - Zijun Wang  |
+| - Yuhang Xiao | - Zhaosheng Li |
 
 ## Table of contents
 
@@ -30,7 +31,7 @@ Our smart contrat defines the following contraints on this DApp:
 - A user shall download every single seed only for once
 - A user shall only endorse the seeds he/she has already downloaded
 
-![Constraints.png](img/Constraints.png)
+![Constraint.png](img/Constraint.png)
 
 ## Files in this repo
 
