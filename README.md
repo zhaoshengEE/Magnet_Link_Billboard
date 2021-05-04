@@ -12,16 +12,12 @@
 
 - [Description](#Description)
 - [Files in this repo](#Files-in-this-repo)
-- [Frontend URL](#Frontend-URL)
-- [Dependencies for this project](#Dependencies-for-this-project)
+- [Front-end URL](#Front-end-URL)
 - [Running the code](#Running-the-code)
 
 ## Description
 
-Nowadays, running credit checks on customers becomes an essential step in many situations,
-including house renting, bank loaning, credit card application, etc. Doing the credit check can
-avoid serving the customer who is not creditable. Having learned the neural network, I decide to build up a two-layer neural network, which is used to classify the customers
-as the person with good credit and the person with bad credit.
+This is project is about building a decentralized application (DApp). The DApp we propose to create is magnet link billboard, which is a peer-to-peer (P2P) platform that encourages users to share documents without worrying about centralized authority and the location of original files. Each document on the platform is considered as a seed. The user can act as a writer and contribute to the DApp by uploading seeds. Also, the user can become a visitor to the platform by browsing, downloading, or endorsing the seeds on the billboard. The back-end of this work is a smart contract, which guarantees the trustworthy transactions of digital assets and constraints some operations on the online platform.
 
 ## Files in this repo
 
@@ -39,7 +35,9 @@ This GitHub repo contains the following folders or files
 
 + `truffle-config.js` is the file when we configure a truffle project at the beginning stage of this work
 
-## Frontend URL
++ `sample_data.txt` is a test seed transmitted to the DApp
+
+## Front-end URL
 https://www.magnetlinkbillboard.com/
    
 ***NOTE 1: A MetaMask account is required when using this DApp***
